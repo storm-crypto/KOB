@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PkIndexView from '../views/pk/PkIndexView'
 import RecordIndexView from '../views/record/RecordIndexView'
-import RankListIndexView from '../views/ranklist/RankListIndexView'
+import RanklistIndexView from '../views/ranklist/RankListIndexView'
 import UserBotIndexView from '../views/user/bot/UserBotIndexView'
 import NotFound from '../views/error/NotFound'
 
@@ -9,7 +9,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    redirect: "/pk",
+    redirect: "/pk/"
   },
   {
     path: "/pk/",
@@ -24,11 +24,11 @@ const routes = [
   {
     path: "/ranklist/",
     name: "ranklist_index",
-    component: RankListIndexView,
+    component: RanklistIndexView,
   },
   {
-    path: "/usr/bot/",
-    name: "usr_bot_index",
+    path: "/user/bot/",
+    name: "user_bot_index",
     component: UserBotIndexView,
   },
   {
@@ -38,8 +38,8 @@ const routes = [
   },
   {
     path: "/:catchAll(.*)",
-    redirect: "/404"
-  },
+    redirect: "/404/"
+  }
 ]
 
 const router = createRouter({

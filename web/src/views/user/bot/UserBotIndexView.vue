@@ -9,7 +9,7 @@ import ContentField from '../../../components/ContentField.vue'
 
 export default {
     components: {
-        ContentField,
+        ContentField
     }
 }
 </script>
