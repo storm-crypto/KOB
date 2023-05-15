@@ -34,7 +34,7 @@ public class AddServiceImpl implements AddService {
 
         Map<String, String> map = new HashMap<>();
 
-        if (title == null || title.length() == 0){
+        if (title == null || title.length() == 0) {
             map.put("error_message", "标题不能为空");
             return map;
         }
@@ -44,22 +44,22 @@ public class AddServiceImpl implements AddService {
             return map;
         }
 
-        if (description.length() == 0){
+        if (description == null || description.length() == 0) {
             description = "这个用户很懒，什么也没留下~";
         }
 
-        if (description != null && description.length() > 300){
+        if (description.length() > 300) {
             map.put("error_message", "Bot描述的长度不能大于300");
             return map;
         }
 
-        if (content == null || content.length() == 0){
+        if (content == null || content.length() == 0) {
             map.put("error_message", "代码不能为空");
             return map;
         }
 
-        if (content.length() > 10000){
-            map.put("error_message", "代码的长度不能超过10000");
+        if (content.length() > 10000) {
+            map.put("error_message", "代码长度不能超过10000");
             return map;
         }
 
@@ -69,7 +69,6 @@ public class AddServiceImpl implements AddService {
             map.put("error_message", "每个用户最多只能创建10个Bot！");
             return map;
         }
-
 
         Date now = new Date();
         Bot bot = new Bot(null, user.getId(), title, description, content, now, now);

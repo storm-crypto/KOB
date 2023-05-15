@@ -1,6 +1,6 @@
 package com.kob.backend.consumer;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.consumer.utils.Game;
 import com.kob.backend.consumer.utils.JwtAuthentication;
 import com.kob.backend.mapper.BotMapper;
@@ -8,6 +8,7 @@ import com.kob.backend.mapper.RecordMapper;
 import com.kob.backend.mapper.UserMapper;
 import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.User;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -35,9 +36,8 @@ public class WebSocketServer {
     private static BotMapper botMapper;
     public static RestTemplate restTemplate;
     public Game game = null;
-
     private final static String addPlayerUrl = "http://127.0.0.1:3001/player/add/";
-    private final static String removePlayerUrl = "http://127.0.0.1:3001/player/remove/";
+    private final static String removePlayerurl = "http://127.0.0.1:3001/player/remove/";
 
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
@@ -48,14 +48,13 @@ public class WebSocketServer {
         WebSocketServer.recordMapper = recordMapper;
     }
     @Autowired
-    public void setBotMapper(BotMapper botMapper){
+    public void setBotMapper(BotMapper botMapper) {
         WebSocketServer.botMapper = botMapper;
     }
     @Autowired
-    public void setRestTemplate(RestTemplate restTemplate){
+    public void setRestTemplate(RestTemplate restTemplate) {
         WebSocketServer.restTemplate = restTemplate;
     }
-
 
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token) throws IOException {
@@ -81,9 +80,10 @@ public class WebSocketServer {
         }
     }
 
-    public static void startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId){
+    public static void startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId) {
         User a = userMapper.selectById(aId), b = userMapper.selectById(bId);
         Bot botA = botMapper.selectById(aBotId), botB = botMapper.selectById(bBotId);
+
         Game game = new Game(
                 13,
                 14,
@@ -92,11 +92,11 @@ public class WebSocketServer {
                 botA,
                 b.getId(),
                 botB
-                );
+        );
         game.createMap();
-        if(users.get(a.getId()) != null)
+        if (users.get(a.getId()) != null)
             users.get(a.getId()).game = game;
-        if(users.get(b.getId()) != null)
+        if (users.get(b.getId()) != null)
             users.get(b.getId()).game = game;
 
         game.start();
@@ -115,7 +115,7 @@ public class WebSocketServer {
         respA.put("opponent_username", b.getUsername());
         respA.put("opponent_photo", b.getPhoto());
         respA.put("game", respGame);
-        if(users.get(a.getId()) != null)
+        if (users.get(a.getId()) != null)
             users.get(a.getId()).sendMessage(respA.toJSONString());
 
         JSONObject respB = new JSONObject();
@@ -123,7 +123,7 @@ public class WebSocketServer {
         respB.put("opponent_username", a.getUsername());
         respB.put("opponent_photo", a.getPhoto());
         respB.put("game", respGame);
-        if(users.get(b.getId()) != null)
+        if (users.get(b.getId()) != null)
             users.get(b.getId()).sendMessage(respB.toJSONString());
     }
 
@@ -140,16 +140,16 @@ public class WebSocketServer {
         System.out.println("stop matching");
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("user_id", this.user.getId().toString());
-        restTemplate.postForObject(removePlayerUrl, data, String.class);
+        restTemplate.postForObject(removePlayerurl, data, String.class);
     }
 
     private void move(int direction) {
         System.out.println("move " + direction);
         if (game.getPlayerA().getId().equals(user.getId())) {
-            if (game.getPlayerA().getBotId().equals(-1)) // 人工操作，亲自出马
+            if (game.getPlayerA().getBotId().equals(-1))  // 亲自出马
                 game.setNextStepA(direction);
         } else if (game.getPlayerB().getId().equals(user.getId())) {
-            if(game.getPlayerB().getBotId().equals(-1)) // 亲自出马
+            if (game.getPlayerB().getBotId().equals(-1))  // 亲自出马
                 game.setNextStepB(direction);
         }
     }

@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Service
 public class RegisterServiceImpl implements RegisterService {
-
     @Autowired
     private UserMapper userMapper;
 
@@ -28,23 +27,24 @@ public class RegisterServiceImpl implements RegisterService {
             map.put("error_message", "用户名不能为空");
             return map;
         }
-        if (password == null || confirmedPassword == null){
+        if (password == null || confirmedPassword == null) {
             map.put("error_message", "密码不能为空");
             return map;
         }
-        username.trim();
+
+        username = username.trim();
         if (username.length() == 0) {
             map.put("error_message", "用户名不能为空");
             return map;
         }
 
-        if (username.length() > 100) {
-            map.put("error_message", "用户名长度不能大于100");
+        if (password.length() == 0 || confirmedPassword.length() == 0) {
+            map.put("error_message", "密码不能为空");
             return map;
         }
 
-        if (password.length() == 0 || confirmedPassword.length() == 0) {
-            map.put("error_message", "密码不能为空");
+        if (username.length() > 100) {
+            map.put("error_message", "用户名长度不能大于100");
             return map;
         }
 
@@ -61,14 +61,13 @@ public class RegisterServiceImpl implements RegisterService {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
         List<User> users = userMapper.selectList(queryWrapper);
-
         if (!users.isEmpty()) {
             map.put("error_message", "用户名已存在");
             return map;
         }
 
         String encodedPassword = passwordEncoder.encode(password);
-        String photo = "https://cdn.acwing.com/media/user/profile/photo/119254_lg_d42bb3311e.jpg";
+        String photo = "https://cdn.acwing.com/media/user/profile/photo/1_lg_844c66b332.jpg";
         User user = new User(null, username, encodedPassword, photo, 1500);
         userMapper.insert(user);
 

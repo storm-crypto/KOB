@@ -69,7 +69,7 @@ public class Bot implements java.util.function.Supplier<Integer> {
             }
         }
 
-        return 2;
+        return 0;
     }
 
     @Override

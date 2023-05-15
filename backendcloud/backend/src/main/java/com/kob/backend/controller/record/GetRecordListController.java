@@ -1,6 +1,6 @@
 package com.kob.backend.controller.record;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.service.record.GetRecordListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +14,8 @@ public class GetRecordListController {
     @Autowired
     private GetRecordListService getRecordListService;
 
-
     @GetMapping("/api/record/getlist/")
-    JSONObject getList(@RequestParam Map<String, String> data){
+    JSONObject getList(@RequestParam Map<String, String> data) {
         Integer page = Integer.parseInt(data.get("page"));
         return getRecordListService.getList(page);
     }
